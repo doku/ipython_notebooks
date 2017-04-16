@@ -9,7 +9,7 @@ try:
     import turtle
     import tkinter
 except:
-    print("warning: could not import the turtle module.", file=sys.stderr)
+    print("warning: could not import the turtle module.")
 
 class SchemeError(Exception):
     """Exception indicating an error in a Scheme program."""

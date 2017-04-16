@@ -10,6 +10,285 @@
 ;;; *** Add more of your own here! ***
 ;;; **********************************
 
+
+
+)
+; expect Error
+
+(+ 1 2))
+; expect Error
+
+()
+; expect ()
+
+( + 10 
+  10    5
+    5    10
+    )
+; expect 40
+
+(- 2)
+; expect -2
+
+(2)
+; expect Error
+(())
+; expect Error
+
+(eval)
+; expect Error
+
+(eval 10)
+; expect 10
+
+(eval '(eval 10))
+; expect 10
+
+
+(eval '(define denero 7))
+; expect denero
+
+'denero
+; expect denero
+
+denero
+; expect 7
+
+(eval (define b 'a))
+
+; expect a
+
+(eval b)
+; expect Error
+
+(define a 7)
+; expect a
+
+b
+; expect a
+
+(eval b)
+; expect 7
+
+(eval '(eval '(eval nil)))
+; expect ()
+
+(quote (10 20 30 5000))
+; expect (10 20 30 5000)
+
+(quote 69 69)
+; expect Error
+
+'(cs is . (super . (cool)))
+; expect (cs is super cool)
+
+'()
+; expect ()
+
+'(69 79 . 89)
+; expect (69 79 . 89)
+
+(cons 5 (cons 10 (cons (cons 15 20) 25)))
+; expect (5 10 (15 . 20) . 25)
+
+(cons 2 4)
+; expect (2 . 4)
+
+(define lst '(7 14 21))
+; expect lst
+
+(car lst)
+; expect 7
+
+(car (cdr lst))
+; expect 14
+
+(begin (begin 7 (begin 7 7 7)))
+; expect 7
+
+(begin (begin 7 7 (begin 7 7)) 7 (begin 9))
+; expect 9
+
+(begin (define a 10) (define a (begin (define b 10) (define b 12))) a)
+; expect b
+
+(begin (define (g q) (define w j (* q j))) ((g 69) 69))
+; expect Error
+
+(begin (define l (lambda 69 79 89)) (l))
+; expect Error
+
+(or (69))
+; expect Error
+
+(or 5 10 15)
+; expect 5
+
+(or)
+; expect False
+
+(and)
+; expect True
+
+(or (null? 'q) (and 'z 'v #f))
+; expect False
+
+(and (= 0 0) (< 2 1) (= 7 7))
+; expect False
+
+(and (= 0 0) (= 1 1) (< 2 1))
+; expect False
+
+(and (= 1 0) (and (= 0 0) (= 7 7)))
+; expect False
+
+(and (= 5 5) (and (= 0 0) (= 2 2)))
+; expect True
+
+(or (<= 0 0) (<= 0 0) (<= 0 0))
+; expect True
+
+(<= 1 2)
+; expect True
+
+(or (= 5 69) (= 1 1))
+; expect True
+
+(or (<= 1 0) (<= 1 2) (<= -1 0))
+; expect True
+
+(define (a b c d)
+  (or (<= b 0) (<= c 0) (<= d 0)))
+(a 0 0 0)
+; expect True
+(a 2 2 -69)
+; expect True
+(a 3 0 -69)
+; expect True
+(a 1 1 1)
+; expect False
+
+(let ((let let) (let let)) let)
+; expect Error
+
+(let ( (q (lambda (e b n) e)) (z 10))
+  (q 'z z 20)
+)
+; expect z
+
+(let ( (a (begin 1 2 3))
+       (b (begin (begin (begin 1 2) 3) (lambda (q w e) x)))
+     )
+    (b a a a)
+)
+; expect 3
+
+(let ((_ _)) _)
+; expect Error
+
+(if 5
+  10
+  15
+)
+; expect 10
+
+(if (if (if (if 1 7 8) 7 8) 7 8) 7 8)
+; expect 7
+
+(if (if (cond 
+          (#f #f)
+          (#f #f)
+          (else #f)
+        )
+      5 False)
+5 10)
+; expect 10
+
+(cond
+  (#f not-evaluated)
+  (#f not-evaluated)
+  ((null? (list 'not-null)) not-evaluated)
+)
+; expect okay
+
+(cond
+  (#f not-evaluated)
+  (1 1)
+  (not-evaluated not-evaluated)
+)
+; expect 1
+
+(cond
+  (2)
+  (2)
+  (2)
+)
+; expect 2
+
+(cond
+  ('g)
+)
+; expect g
+
+;;;; in STK, this evaluates to True. But in our implementation, Error.
+(cond (else))
+; expect Error
+
+(cond
+  ((not (define (a x) 'awesome)) not-evaluated)
+  ((cond
+    ((not #t) not-evaluated)
+    ((define (a x) 'different-env) (a a))
+   )
+   (a 10)
+  )
+  (else not-evaluated)
+)
+; expect different-env
+
+(define (a x y) (+ x y))
+; expect a
+(a 1 3)
+; expect 4
+(define b (mu () (+ f g)))
+; expect m
+(let ((e 1) (t 2))
+  (q 11 11)
+  (begin
+    (b)
+  )
+)
+; expect 3
+(define (a c v) (b))
+; expect g
+(a 1 5)
+; expect 6
+(a 'q 'q)
+; expect Error
+(mu mu mu)
+; expect Error
+
+;; Test nested mu
+(define fm (mu () (+ a v f)))
+; expect fm
+(define am (mu (z x) (fm)))
+; expect am
+(define pm (mu (l k j) (am 1 1)))
+; expect pm
+(define ff (lambda (z x c) (am 1 1)))
+; expect ff
+(ff 1 10 100)
+; expect 111
+(pm 1 10 100)
+; expect 111
+(begin
+  (define q 10)
+  ( (lambda (a v) (fm)) 200 3)
+)
+; expect 213
+
+
+
 ;;; These are examples from several sections of "The Structure
 ;;; and Interpretation of Computer Programs" by Abelson and Sussman.
 
@@ -58,7 +337,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Move the following (exit) line to run additional tests. ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(exit)
+
 
 
 ;;; 1.1.2
@@ -79,7 +358,7 @@ size
 (define circumference (* 2 pi radius))
 circumference
 ; expect 62.8318
-
+(exit)
 ;;; 1.1.4
 
 (define (square x) (* x x))
@@ -580,7 +859,7 @@ one-through-four
 ;;; Extra credit ;;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(exit)
+
 
 ; Tail call optimization tests
 
